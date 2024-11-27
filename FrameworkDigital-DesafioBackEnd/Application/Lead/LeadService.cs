@@ -6,6 +6,8 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using FrameworkDigital_DesafioBackEnd.ORM.Model.Pagination;
 using FrameworkDigital_DesafioBackEnd.ORM.Enum;
+using System.Net.Mail;
+using System.Net;
 
 
 namespace FrameworkDigital_DesafioBackEnd.Application.Lead
@@ -75,6 +77,7 @@ namespace FrameworkDigital_DesafioBackEnd.Application.Lead
             {
                 return false;
             }
+            SendEmail();
 
             // Verifica e aplica desconto
             HasDiscount(lead, statusRequest.Status);
@@ -136,6 +139,27 @@ namespace FrameworkDigital_DesafioBackEnd.Application.Lead
             {
                 lead.Price -= lead.Price * DiscountPercentage;
             }
+        }
+
+
+        private void SendEmail()
+        {
+            MailMessage mailMessage = new MailMessage();
+            var smtpClient = new SmtpClient("smtp.gmail.com", 587);
+            smtpClient.EnableSsl = true;
+            smtpClient.UseDefaultCredentials = false;
+            smtpClient.Credentials = new NetworkCredential("frameworkdigitalprovaemail@gmail.com", "agaracxydzlyrqvk");
+
+            mailMessage.From = new MailAddress("frameworkdigitalprovaemail@gmail.com", "Framework Digital");
+            mailMessage.Body = "Teste de envio de email";
+            mailMessage.Subject = "Subject teste de nevio";
+            mailMessage.IsBodyHtml = true;
+            mailMessage.To.Add("gabrielosantosb@gmail.com");
+
+            smtpClient.Send(mailMessage);
+
+
+
         }
 
    
