@@ -2,6 +2,7 @@
 {
     public class LeadModel
     {
+
         public int LeadId { get; set; }
         public string ContactFirstName { get; set; }
         public string ContactLastName { get; set; } 
@@ -12,7 +13,9 @@
         public string Category { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
-        public bool IsInvitedStatus { get; set; } 
+        public bool Status { get; set; } // "Invited", "Accepted", "Declined"
+
+
 
     }
 }
