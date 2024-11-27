@@ -34,5 +34,10 @@ namespace FrameworkDigital_DesafioBackEnd.Application.Lead
         {
             throw new NotImplementedException();
         }
+
+        public bool UpdateLeadStatus(int leadId, string status)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

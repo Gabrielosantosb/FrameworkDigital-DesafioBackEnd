@@ -91,6 +91,26 @@ namespace FrameworkDigital_DesafioBackEnd.Controllers
 
         }
 
+        [HttpPatch("update-lead-status/{leadId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult UpdateLeadStatus(int leadId, [FromBody] string status)
+        {
+            if (string.IsNullOrEmpty(status))
+            {
+                return BadRequest("Status inválido");
+            }
+
+            var updated = _leadService.UpdateLeadStatus(leadId, status);
+
+            if (updated)
+            {
+                return Ok($"Lead ID {leadId} atualizado para o status '{status}'");
+            }
+
+            return BadRequest("Falha ao atualizar o status do Lead");
+        }
+
 
     }
 }
