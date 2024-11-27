@@ -10,7 +10,12 @@ namespace FrameworkDigital_DesafioBackEnd.Application.Lead
             throw new NotImplementedException();
         }
 
-        public LeadModel CreateLead(CreateLeadRequest leadRequest)
+        public LeadModel GetLeadById(int leadId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public LeadModel CreateLead(LeadRequest leadRequest)
         {
             throw new NotImplementedException();
         }
@@ -21,6 +26,11 @@ namespace FrameworkDigital_DesafioBackEnd.Application.Lead
         }
 
         public LeadModel DesativeLead(int leadId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public LeadModel UpdateLead(int leadId, LeadRequest updatedUnit)
         {
             throw new NotImplementedException();
         }
