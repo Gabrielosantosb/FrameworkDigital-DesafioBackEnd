@@ -10,7 +10,7 @@ namespace FrameworkDigital_DesafioBackEnd.Application.Lead
         LeadModel GetLeadById(int leadId);
         LeadModel CreateLead(LeadRequest leadRequest);
         LeadModel UpdateLead(int leadId, LeadRequest updatedLead);
-        bool UpdateLeadStatus(int leadId, string status);
+        bool UpdateLeadStatus(int leadId, UpdateLeadStatusRequest statusRequest);
 
 
     }

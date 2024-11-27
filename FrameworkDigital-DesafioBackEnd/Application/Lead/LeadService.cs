@@ -63,22 +63,23 @@ namespace FrameworkDigital_DesafioBackEnd.Application.Lead
             return existingLead;
         }
 
-        public bool UpdateLeadStatus(int leadId, string newStatus)
+        public bool UpdateLeadStatus(int leadId, UpdateLeadStatusRequest statusRequest)
         {
-            if (!IsValidLeadStatus(newStatus, out var parsedStatus))
+            if (!IsValidLeadStatus(statusRequest.Status))
             {
                 return false;
             }
 
             var lead = _leadRepository.GetById(leadId);
-            if (lead == null)
+            if (lead == null || statusRequest == null)
             {
                 return false;
             }
-            // Verifica e aplica desconto
-            HasDiscount(lead, parsedStatus);
 
-            lead.Status = parsedStatus;
+            // Verifica e aplica desconto
+            HasDiscount(lead, statusRequest.Status);
+
+            lead.Status = statusRequest.Status;
 
             _leadRepository.SaveChanges();
 
@@ -121,9 +122,9 @@ namespace FrameworkDigital_DesafioBackEnd.Application.Lead
         }
 
 
-        private bool IsValidLeadStatus(string status, out LeadStatusEnum parsedStatus)
-        {
-            return Enum.TryParse<LeadStatusEnum>(status, true, out parsedStatus);
+        private bool IsValidLeadStatus(LeadStatusEnum status)
+        {            
+            return Enum.IsDefined(typeof(LeadStatusEnum), status);
         }
 
         private void HasDiscount(LeadModel lead, LeadStatusEnum status)
@@ -137,7 +138,6 @@ namespace FrameworkDigital_DesafioBackEnd.Application.Lead
             }
         }
 
-
-
+   
     }
 }
