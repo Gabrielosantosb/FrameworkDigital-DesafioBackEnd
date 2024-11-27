@@ -1,4 +1,6 @@
-﻿namespace FrameworkDigital_DesafioBackEnd.ORM.Entity.Lead
+﻿using FrameworkDigital_DesafioBackEnd.ORM.Enum;
+
+namespace FrameworkDigital_DesafioBackEnd.ORM.Entity.Lead
 {
     public class LeadModel
     {
@@ -13,7 +15,7 @@
         public string Category { get; set; }
         public string Description { get; set; }
         public decimal Price { get; set; }
-        public bool Status { get; set; } // "Invited", "Accepted", "Declined"
+        public LeadStatusEnum Status { get; set; } // "Invited", "Accepted", "Declined"
 
 
 

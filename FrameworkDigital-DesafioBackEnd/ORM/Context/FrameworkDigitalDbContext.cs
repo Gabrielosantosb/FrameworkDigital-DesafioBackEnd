@@ -12,7 +12,10 @@ namespace FrameworkDigital_DesafioBackEnd.ORM.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            //base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<LeadModel>()
+            .Property(l => l.Status)
+            .HasConversion<string>();
         }
 
     }
