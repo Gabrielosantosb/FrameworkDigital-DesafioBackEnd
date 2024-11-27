@@ -63,26 +63,26 @@ namespace FrameworkDigital_DesafioBackEnd.Application.Lead
             return existingLead;
         }
 
-        public bool UpdateLeadStatus(int leadId, string status)
-        {            
-            if (!Enum.TryParse<LeadStatusEnum>(status, true, out var parsedStatus))
+        public bool UpdateLeadStatus(int leadId, string newStatus)
+        {
+            if (!IsValidLeadStatus(newStatus, out var parsedStatus))
             {
-                return false; // Status inválido
+                return false;
             }
-            
+
             var lead = _leadRepository.GetById(leadId);
             if (lead == null)
             {
                 return false;
             }
+            // Verifica e aplica desconto
+            HasDiscount(lead, parsedStatus);
 
-            // Atualizar o status
             lead.Status = parsedStatus;
 
-            // Salvar as mudanças no banco de dados
-            _leadRepository._context.SaveChanges();
+            _leadRepository.SaveChanges();
 
-            return true; 
+            return true;
         }
 
         private IQueryable<LeadModel> ApplyGetLeadsFilters(IQueryable<LeadModel> query, GetLeadsFilterDTO filter)
@@ -119,6 +119,24 @@ namespace FrameworkDigital_DesafioBackEnd.Application.Lead
 
             return query;
         }
+
+
+        private bool IsValidLeadStatus(string status, out LeadStatusEnum parsedStatus)
+        {
+            return Enum.TryParse<LeadStatusEnum>(status, true, out parsedStatus);
+        }
+
+        private void HasDiscount(LeadModel lead, LeadStatusEnum status)
+        {
+            const decimal DiscountThreshold = 500;
+            const decimal DiscountPercentage = 0.10m;
+            
+            if (status == LeadStatusEnum.Accepted && lead.Price > DiscountThreshold)
+            {
+                lead.Price -= lead.Price * DiscountPercentage;
+            }
+        }
+
 
 
     }
