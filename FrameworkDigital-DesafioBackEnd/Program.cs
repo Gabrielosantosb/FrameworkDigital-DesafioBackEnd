@@ -1,13 +1,11 @@
-using FrameworkDigital_DesafioBackEnd.Application.Email;
+
 using FrameworkDigital_DesafioBackEnd.Application.Lead;
 using FrameworkDigital_DesafioBackEnd.Mappings;
 using FrameworkDigital_DesafioBackEnd.ORM.Context;
 using FrameworkDigital_DesafioBackEnd.ORM.Entity.EmailSettings;
 using FrameworkDigital_DesafioBackEnd.ORM.Entity.Lead;
 using FrameworkDigital_DesafioBackEnd.ORM.Repository;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 

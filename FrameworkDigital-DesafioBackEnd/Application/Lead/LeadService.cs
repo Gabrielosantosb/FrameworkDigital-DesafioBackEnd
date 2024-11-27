@@ -3,14 +3,9 @@ using FrameworkDigital_DesafioBackEnd.ORM.Entity.Lead;
 using FrameworkDigital_DesafioBackEnd.ORM.Model.Lead;
 using FrameworkDigital_DesafioBackEnd.ORM.Repository;
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using FrameworkDigital_DesafioBackEnd.ORM.Model.Pagination;
 using FrameworkDigital_DesafioBackEnd.ORM.Enum;
-using System.Net.Mail;
-using System.Net;
-using FrameworkDigital_DesafioBackEnd.ORM.Entity.EmailSettings;
-using Microsoft.Extensions.Options;
-using FrameworkDigital_DesafioBackEnd.Application.Email;
+
 
 
 namespace FrameworkDigital_DesafioBackEnd.Application.Lead
