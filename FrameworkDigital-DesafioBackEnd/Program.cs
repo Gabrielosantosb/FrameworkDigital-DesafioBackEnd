@@ -1,3 +1,4 @@
+using FrameworkDigital_DesafioBackEnd.Application.Email;
 using FrameworkDigital_DesafioBackEnd.Application.Lead;
 using FrameworkDigital_DesafioBackEnd.Mappings;
 using FrameworkDigital_DesafioBackEnd.ORM.Context;
@@ -27,7 +28,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<BaseRepository<LeadModel>>();
 
-
+builder.Services.AddTransient<EmailService>();
 builder.Services.AddScoped<ILeadService, LeadService>();
 #endregion dependencyInjection
 

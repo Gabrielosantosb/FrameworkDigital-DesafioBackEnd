@@ -10,6 +10,7 @@ using System.Net.Mail;
 using System.Net;
 using FrameworkDigital_DesafioBackEnd.ORM.Entity.EmailSettings;
 using Microsoft.Extensions.Options;
+using FrameworkDigital_DesafioBackEnd.Application.Email;
 
 
 namespace FrameworkDigital_DesafioBackEnd.Application.Lead
@@ -21,14 +22,15 @@ namespace FrameworkDigital_DesafioBackEnd.Application.Lead
         private readonly BaseRepository<LeadModel> _leadRepository;
         private readonly FrameworkDigitalDbContext _context;
         private readonly IMapper _mapper;
-        private readonly EmailSettings _emailSettings;
+        private readonly EmailService _emailService;
 
-        public LeadService(BaseRepository<LeadModel> leadRepository, FrameworkDigitalDbContext context, IMapper mapper, IOptions<EmailSettings> emailSettings)
+
+        public LeadService(BaseRepository<LeadModel> leadRepository, FrameworkDigitalDbContext context, IMapper mapper, EmailService emailService)
         {
             _leadRepository = leadRepository;
             _context = context;
             _mapper = mapper;
-            _emailSettings = emailSettings.Value ?? throw new ArgumentNullException(nameof(emailSettings));
+            _emailService = emailService;
 
         }
 
@@ -145,50 +147,11 @@ namespace FrameworkDigital_DesafioBackEnd.Application.Lead
             if (status == LeadStatusEnum.Accepted && lead.Price > DiscountThreshold)
             {
                 decimal discount = lead.Price * DiscountPercentage;
-                lead.Price -= discount;                
-                SendEmail(lead);
+                lead.Price -= discount;
+                _emailService.SendEmail(lead);                
             }
         }
-
-        public void SendEmail(LeadModel lead)
-        {
-            if (_emailSettings == null)
-            {
-                throw new InvalidOperationException("Email settings not configured.");
-            }
-
-            //  objeto MailMessage
-            MailMessage mailMessage = new MailMessage();
-
-            // cliente SMTP usando as credenciais do appsettings.json
-            var smtpClient = new SmtpClient(_emailSettings.SmtpHost, _emailSettings.SmtpPort)
-            {
-                EnableSsl = true,
-                UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(_emailSettings.Email, _emailSettings.Password)
-            };
-
-            // remetente e o corpo do e-mail
-            mailMessage.From = new MailAddress(_emailSettings.Email, "Framework Digital");
-            
-            string body = $@"
-            <h1>Notificação de Status de Lead</h1>
-            <p><strong>Status da Lead:</strong> {lead.Status}</p>
-            <p><strong>Nome da Lead:</strong> {lead.ContactFirstName}</p>
-            <p><strong>Valor Original:</strong> {lead.Price:C}</p>
-            <p><strong>Desconto Aplicado:</strong> {lead.Price * 0.10m:C}</p>
-            <p><strong>Valor Final Após Desconto:</strong> {lead.Price:C}</p>";
-
-            mailMessage.Body = body;
-            mailMessage.Subject = "Alteração no Status da Lead - Status Aceito";
-            mailMessage.IsBodyHtml = true;
-            mailMessage.To.Add(lead.ContactEmail);
-            //mailMessage.To.Add("gabrielosantosb@gmail.com");  
-
-
-            // envia o e-mail
-            smtpClient.Send(mailMessage);
-        }
+        
 
 
     }
