@@ -1,7 +1,9 @@
 using FrameworkDigital_DesafioBackEnd.Application.Lead;
+using FrameworkDigital_DesafioBackEnd.Mappings;
 using FrameworkDigital_DesafioBackEnd.ORM.Context;
 using FrameworkDigital_DesafioBackEnd.ORM.Entity.Lead;
 using FrameworkDigital_DesafioBackEnd.ORM.Repository;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +14,12 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+#region Mapper
+builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddAutoMapper(typeof(LeadMappingProfile));
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+#endregion Mapper
 
 #region dependencyInjection
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

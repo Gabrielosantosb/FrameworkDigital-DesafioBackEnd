@@ -14,10 +14,11 @@ namespace FrameworkDigital_DesafioBackEnd.Application.Lead
         private readonly FrameworkDigitalDbContext _context;
         private readonly IMapper _mapper;
 
-        public LeadService(BaseRepository<LeadModel> leadRepository, FrameworkDigitalDbContext context)
+        public LeadService(BaseRepository<LeadModel> leadRepository, FrameworkDigitalDbContext context, IMapper mapper)
         {
             _leadRepository = leadRepository;
             _context = context;
+            _mapper = mapper;
         }
 
         public IEnumerable<LeadModel> GetLeads()
