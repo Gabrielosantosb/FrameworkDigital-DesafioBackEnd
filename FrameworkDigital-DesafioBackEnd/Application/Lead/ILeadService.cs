@@ -8,8 +8,8 @@ namespace FrameworkDigital_DesafioBackEnd.Application.Lead
     {
         IEnumerable<LeadModel> GetLeads(PaginationDTO pagination, GetLeadsFilterDTO leadsFilter);
         LeadModel GetLeadById(int leadId);
-        LeadModel CreateLead(LeadRequest leadRequest);
-        LeadModel UpdateLead(int leadId, LeadRequest updatedLead);
+        LeadModel CreateLead(CreateLeadRequest leadRequest);
+        LeadModel UpdateLead(int leadId, UpdateLeadRequest updatedLead);
         bool UpdateLeadStatus(int leadId, UpdateLeadStatusRequest statusRequest);
 
 

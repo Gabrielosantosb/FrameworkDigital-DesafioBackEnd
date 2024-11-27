@@ -1,4 +1,4 @@
-﻿using System; // Necessário para referenciar a classe Exception
+﻿using System; 
 
 namespace FrameworkDigital_DesafioBackEnd.EmailException
 {

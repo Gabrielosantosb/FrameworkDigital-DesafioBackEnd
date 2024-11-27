@@ -40,7 +40,7 @@ namespace FrameworkDigital_DesafioBackEnd.Controllers
         [HttpGet("get-lead/{leadId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult GetUnitById(int leadId)
+        public IActionResult GetLeadById(int leadId)
         {
             var lead = _leadService.GetLeadById(leadId);
 
@@ -57,7 +57,7 @@ namespace FrameworkDigital_DesafioBackEnd.Controllers
         [HttpPost("create-lead")]        
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult CreateUnit([FromBody] LeadRequest leadRequest)
+        public IActionResult CreateLead([FromBody] CreateLeadRequest leadRequest)
         {
 
             if (leadRequest == null)
@@ -78,7 +78,7 @@ namespace FrameworkDigital_DesafioBackEnd.Controllers
         [HttpPut("update-lead/{leadId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult UpdateUnit([FromBody] LeadRequest leadModel, int leadId)
+        public IActionResult UpdateLead([FromBody] UpdateLeadRequest leadModel, int leadId)
         {
             if (leadModel == null)
             {

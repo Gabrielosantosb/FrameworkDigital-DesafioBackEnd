@@ -10,7 +10,7 @@ namespace FrameworkDigital_DesafioBackEnd.Mappings
         public LeadMappingProfile()
         {
             //AutoMapper para CreateLead
-            CreateMap<LeadRequest, LeadModel>()
+            CreateMap<CreateLeadRequest, LeadModel>()
                 .AfterMap((leadRequest, leadModel) =>
                 {
                     leadModel.Status = ORM.Enum.LeadStatusEnum.Invited;
@@ -18,7 +18,7 @@ namespace FrameworkDigital_DesafioBackEnd.Mappings
                 });
 
             //AutoMapper para UpdateLead
-            CreateMap<LeadRequest, LeadModel>()
+            CreateMap<UpdateLeadRequest, LeadModel>()
                 .ForMember(dest => dest.Status, opt => opt.Ignore())  // Ignora a atualização do status
                 .ForMember(dest => dest.DateCreated, opt => opt.Ignore());  // Ignora a data de criação
         }

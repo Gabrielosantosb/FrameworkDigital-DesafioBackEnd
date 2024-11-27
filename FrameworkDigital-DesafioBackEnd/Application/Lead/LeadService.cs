@@ -48,7 +48,7 @@ namespace FrameworkDigital_DesafioBackEnd.Application.Lead
             return lead;
         }
 
-        public LeadModel CreateLead(LeadRequest leadRequest)
+        public LeadModel CreateLead(CreateLeadRequest leadRequest)
         {
             if (leadRequest == null) return null;
             var newLead = _mapper.Map<LeadModel>(leadRequest);
@@ -57,7 +57,7 @@ namespace FrameworkDigital_DesafioBackEnd.Application.Lead
             return res;
         }
 
-        public LeadModel UpdateLead(int leadId, LeadRequest updatedLead)
+        public LeadModel UpdateLead(int leadId, UpdateLeadRequest updatedLead)
         {
             var existingLead = _leadRepository.GetById(leadId);
             if (existingLead == null) return null;

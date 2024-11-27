@@ -1,6 +1,6 @@
 ﻿namespace FrameworkDigital_DesafioBackEnd.ORM.Model.Lead
 {
-    public class LeadRequest
+    public class CreateLeadRequest
     {
         public string ContactFirstName { get; set; }
         public string ContactLastName { get; set; }
