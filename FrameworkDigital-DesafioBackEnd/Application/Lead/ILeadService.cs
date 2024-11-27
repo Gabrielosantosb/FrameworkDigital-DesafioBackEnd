@@ -8,7 +8,7 @@ namespace FrameworkDigital_DesafioBackEnd.Application.Lead
         IEnumerable<LeadModel> GetLeads();
         LeadModel GetLeadById(int leadId);
         LeadModel CreateLead(LeadRequest leadRequest);
-        LeadModel UpdateLead(int leadId, LeadRequest updatedUnit);
+        LeadModel UpdateLead(int leadId, LeadRequest updatedLead);
         bool UpdateLeadStatus(int leadId, string status);
 
 

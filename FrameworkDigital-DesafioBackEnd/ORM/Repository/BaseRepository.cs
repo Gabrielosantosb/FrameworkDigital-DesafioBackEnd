@@ -40,5 +40,15 @@ namespace FrameworkDigital_DesafioBackEnd.ORM.Repository
             _context.Update(entity);
             return entity;
         }
+
+        public T GetById(int id)
+        {
+            return _context.Set<T>().Find(id);
+        }
+
+        public void SaveChanges()
+        {
+            _context.SaveChanges(true);
+        }
     }
 }
