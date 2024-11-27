@@ -4,6 +4,7 @@ using FrameworkDigital_DesafioBackEnd.ORM.Model.Lead;
 using FrameworkDigital_DesafioBackEnd.ORM.Repository;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using FrameworkDigital_DesafioBackEnd.ORM.Model.Pagination;
 
 
 namespace FrameworkDigital_DesafioBackEnd.Application.Lead
@@ -21,13 +22,16 @@ namespace FrameworkDigital_DesafioBackEnd.Application.Lead
             _mapper = mapper;
         }
 
-        public IEnumerable<LeadModel> GetLeads(int page = 1, int pageSize = 10)
+        public IEnumerable<LeadModel> GetLeads(PaginationDTO pagination, GetLeadsFilterDTO filter)
         {
-            var query = _leadRepository._context.Lead.AsQueryable();
-            query = query.Skip((page - 1) * pageSize)
-            .Take(pageSize);
+            var query = _leadRepository._context.Lead.AsQueryable();            
+            query = ApplyGetLeadsFilters(query, filter);            
+            query = query.Skip((pagination.Page - 1) * pagination.PageSize)
+                         .Take(pagination.PageSize);
+
             return query.ToList();
         }
+
 
         public LeadModel GetLeadById(int leadId)
         {
@@ -63,6 +67,41 @@ namespace FrameworkDigital_DesafioBackEnd.Application.Lead
             throw new NotImplementedException();
         }
 
-        
+        private IQueryable<LeadModel> ApplyGetLeadsFilters(IQueryable<LeadModel> query, GetLeadsFilterDTO filter)
+        {
+            if (!string.IsNullOrEmpty(filter.ContactFirstName))
+                query = query.Where(lead => lead.ContactFirstName.Contains(filter.ContactFirstName));
+
+            if (!string.IsNullOrEmpty(filter.ContactLastName))
+                query = query.Where(lead => lead.ContactLastName.Contains(filter.ContactLastName));
+
+            if (!string.IsNullOrEmpty(filter.ContactEmail))
+                query = query.Where(lead => lead.ContactEmail.Contains(filter.ContactEmail));
+
+            if (!string.IsNullOrEmpty(filter.Suburb))
+                query = query.Where(lead => lead.Suburb.Contains(filter.Suburb));
+
+            if (!string.IsNullOrEmpty(filter.Category))
+                query = query.Where(lead => lead.Category.Contains(filter.Category));
+
+            if (filter.DateCreatedStart.HasValue)
+                query = query.Where(lead => lead.DateCreated >= filter.DateCreatedStart.Value);
+
+            if (filter.DateCreatedEnd.HasValue)
+                query = query.Where(lead => lead.DateCreated <= filter.DateCreatedEnd.Value);
+
+            if (filter.Status.HasValue)
+                query = query.Where(lead => lead.Status == filter.Status.Value);
+
+            if (filter.MinPrice.HasValue)
+                query = query.Where(lead => lead.Price >= filter.MinPrice.Value);
+
+            if (filter.MaxPrice.HasValue)
+                query = query.Where(lead => lead.Price <= filter.MaxPrice.Value);
+
+            return query;
+        }
+
+
     }
 }

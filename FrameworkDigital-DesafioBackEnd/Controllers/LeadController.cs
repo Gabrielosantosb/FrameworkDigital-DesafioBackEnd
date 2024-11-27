@@ -1,6 +1,7 @@
 ﻿using FrameworkDigital_DesafioBackEnd.Application.Lead;
 using FrameworkDigital_DesafioBackEnd.ORM.Entity.Lead;
 using FrameworkDigital_DesafioBackEnd.ORM.Model.Lead;
+using FrameworkDigital_DesafioBackEnd.ORM.Model.Pagination;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FrameworkDigital_DesafioBackEnd.Controllers
@@ -21,18 +22,17 @@ namespace FrameworkDigital_DesafioBackEnd.Controllers
         [HttpGet("get-leads")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult GetLeads(
-          int page = 1,
-          int pageSize = 10)
-        {
-            var leads = _leadService.GetLeads();
-            if (leads != null) {
-
+        public IActionResult GetLeads([FromQuery] PaginationDTO pagination, [FromQuery] GetLeadsFilterDTO filters)
+        {            
+            var leads = _leadService.GetLeads(pagination, filters);
+        
+            if (leads.Any())
+            {
                 return Ok(leads);
             }
             else
             {
-                return BadRequest("Lead não encontrada");
+                return NotFound("Leads ainda não criadas!");
             }
 
         }
