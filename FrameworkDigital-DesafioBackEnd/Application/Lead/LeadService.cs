@@ -77,7 +77,7 @@ namespace FrameworkDigital_DesafioBackEnd.Application.Lead
             {
                 return false;
             }
-            SendEmail();
+            
 
             // Verifica e aplica desconto
             HasDiscount(lead, statusRequest.Status);
@@ -137,31 +137,49 @@ namespace FrameworkDigital_DesafioBackEnd.Application.Lead
             
             if (status == LeadStatusEnum.Accepted && lead.Price > DiscountThreshold)
             {
-                lead.Price -= lead.Price * DiscountPercentage;
+                decimal discount = lead.Price * DiscountPercentage;
+                lead.Price -= discount;                
+                SendEmail(lead);
             }
         }
 
 
-        private void SendEmail()
+        private void SendEmail(LeadModel lead)
         {
+            // Criação do objeto MailMessage
             MailMessage mailMessage = new MailMessage();
-            var smtpClient = new SmtpClient("smtp.gmail.com", 587);
-            smtpClient.EnableSsl = true;
-            smtpClient.UseDefaultCredentials = false;
-            smtpClient.Credentials = new NetworkCredential("frameworkdigitalprovaemail@gmail.com", "agaracxydzlyrqvk");
 
+            var emailClient = lead.ContactEmail;
+            // Configuração do cliente SMTP
+            var smtpClient = new SmtpClient("smtp.gmail.com", 587)
+            {
+                EnableSsl = true,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential("frameworkdigitalprovaemail@gmail.com", "agaracxydzlyrqvk")
+            };
+            
             mailMessage.From = new MailAddress("frameworkdigitalprovaemail@gmail.com", "Framework Digital");
-            mailMessage.Body = "Teste de envio de email";
-            mailMessage.Subject = "Subject teste de nevio";
+
+            // Corpo do e-mail
+            string body = $@"
+            <h1>Notificação de Status de Lead</h1>
+            <p><strong>Status da Lead:</strong> {lead.Status}</p>
+            <p><strong>Nome da Lead:</strong> {lead.ContactFirstName}</p>
+            <p><strong>Valor Original:</strong> {lead.Price:C}</p>
+            <p><strong>Desconto Aplicado:</strong> {lead.Price * 0.10m:C}</p>
+            <p><strong>Valor Final Após Desconto:</strong> {lead.Price:C}</p>";
+            
+            mailMessage.Body = body;
+            mailMessage.Subject = "Alteração no Status da Lead - Status Aceito";
+            
             mailMessage.IsBodyHtml = true;
-            mailMessage.To.Add("gabrielosantosb@gmail.com");
+            
+            mailMessage.To.Add(emailClient);
 
+            // Enviar o e-mail
             smtpClient.Send(mailMessage);
-
-
-
         }
 
-   
+
     }
 }
