@@ -21,9 +21,12 @@ namespace FrameworkDigital_DesafioBackEnd.Application.Lead
             _mapper = mapper;
         }
 
-        public IEnumerable<LeadModel> GetLeads()
+        public IEnumerable<LeadModel> GetLeads(int page = 1, int pageSize = 10)
         {
-            throw new NotImplementedException();
+            var query = _leadRepository._context.Lead.AsQueryable();
+            query = query.Skip((page - 1) * pageSize)
+            .Take(pageSize);
+            return query.ToList();
         }
 
         public LeadModel GetLeadById(int leadId)

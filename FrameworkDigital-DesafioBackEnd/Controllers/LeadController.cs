@@ -21,10 +21,12 @@ namespace FrameworkDigital_DesafioBackEnd.Controllers
         [HttpGet("get-leads")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult GetLeads()
+        public IActionResult GetLeads(
+          int page = 1,
+          int pageSize = 10)
         {
             var leads = _leadService.GetLeads();
-            if (leads == null) {
+            if (leads != null) {
 
                 return Ok(leads);
             }
