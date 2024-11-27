@@ -8,21 +8,28 @@ using FrameworkDigital_DesafioBackEnd.ORM.Model.Pagination;
 using FrameworkDigital_DesafioBackEnd.ORM.Enum;
 using System.Net.Mail;
 using System.Net;
+using FrameworkDigital_DesafioBackEnd.ORM.Entity.EmailSettings;
+using Microsoft.Extensions.Options;
 
 
 namespace FrameworkDigital_DesafioBackEnd.Application.Lead
 {
+    
+
     public class LeadService : ILeadService
     {
         private readonly BaseRepository<LeadModel> _leadRepository;
         private readonly FrameworkDigitalDbContext _context;
         private readonly IMapper _mapper;
+        private readonly EmailSettings _emailSettings;
 
-        public LeadService(BaseRepository<LeadModel> leadRepository, FrameworkDigitalDbContext context, IMapper mapper)
+        public LeadService(BaseRepository<LeadModel> leadRepository, FrameworkDigitalDbContext context, IMapper mapper, IOptions<EmailSettings> emailSettings)
         {
             _leadRepository = leadRepository;
             _context = context;
             _mapper = mapper;
+            _emailSettings = emailSettings.Value ?? throw new ArgumentNullException(nameof(emailSettings));
+
         }
 
         public IEnumerable<LeadModel> GetLeads(PaginationDTO pagination, GetLeadsFilterDTO filter)
@@ -143,24 +150,27 @@ namespace FrameworkDigital_DesafioBackEnd.Application.Lead
             }
         }
 
-
-        private void SendEmail(LeadModel lead)
+        public void SendEmail(LeadModel lead)
         {
-            // Criação do objeto MailMessage
+            if (_emailSettings == null)
+            {
+                throw new InvalidOperationException("Email settings not configured.");
+            }
+
+            //  objeto MailMessage
             MailMessage mailMessage = new MailMessage();
 
-            var emailClient = lead.ContactEmail;
-            // Configuração do cliente SMTP
-            var smtpClient = new SmtpClient("smtp.gmail.com", 587)
+            // cliente SMTP usando as credenciais do appsettings.json
+            var smtpClient = new SmtpClient(_emailSettings.SmtpHost, _emailSettings.SmtpPort)
             {
                 EnableSsl = true,
                 UseDefaultCredentials = false,
-                Credentials = new NetworkCredential("frameworkdigitalprovaemail@gmail.com", "agaracxydzlyrqvk")
+                Credentials = new NetworkCredential(_emailSettings.Email, _emailSettings.Password)
             };
-            
-            mailMessage.From = new MailAddress("frameworkdigitalprovaemail@gmail.com", "Framework Digital");
 
-            // Corpo do e-mail
+            // remetente e o corpo do e-mail
+            mailMessage.From = new MailAddress(_emailSettings.Email, "Framework Digital");
+            
             string body = $@"
             <h1>Notificação de Status de Lead</h1>
             <p><strong>Status da Lead:</strong> {lead.Status}</p>
@@ -168,15 +178,15 @@ namespace FrameworkDigital_DesafioBackEnd.Application.Lead
             <p><strong>Valor Original:</strong> {lead.Price:C}</p>
             <p><strong>Desconto Aplicado:</strong> {lead.Price * 0.10m:C}</p>
             <p><strong>Valor Final Após Desconto:</strong> {lead.Price:C}</p>";
-            
+
             mailMessage.Body = body;
             mailMessage.Subject = "Alteração no Status da Lead - Status Aceito";
-            
             mailMessage.IsBodyHtml = true;
-            
-            mailMessage.To.Add(emailClient);
+            mailMessage.To.Add(lead.ContactEmail);
+            //mailMessage.To.Add("gabrielosantosb@gmail.com");  
 
-            // Enviar o e-mail
+
+            // envia o e-mail
             smtpClient.Send(mailMessage);
         }
 

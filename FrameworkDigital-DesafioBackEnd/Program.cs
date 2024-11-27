@@ -1,10 +1,12 @@
 using FrameworkDigital_DesafioBackEnd.Application.Lead;
 using FrameworkDigital_DesafioBackEnd.Mappings;
 using FrameworkDigital_DesafioBackEnd.ORM.Context;
+using FrameworkDigital_DesafioBackEnd.ORM.Entity.EmailSettings;
 using FrameworkDigital_DesafioBackEnd.ORM.Entity.Lead;
 using FrameworkDigital_DesafioBackEnd.ORM.Repository;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +31,10 @@ builder.Services.AddScoped<BaseRepository<LeadModel>>();
 builder.Services.AddScoped<ILeadService, LeadService>();
 #endregion dependencyInjection
 
+#region emailSettings
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+
+#endregion emailSettings
 
 #region mysqlconfig
 builder.Services.AddDbContext<FrameworkDigitalDbContext>(options =>
