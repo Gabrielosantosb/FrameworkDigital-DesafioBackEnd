@@ -5,6 +5,7 @@ using FrameworkDigital_DesafioBackEnd.ORM.Repository;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using FrameworkDigital_DesafioBackEnd.ORM.Model.Pagination;
+using FrameworkDigital_DesafioBackEnd.ORM.Enum;
 
 
 namespace FrameworkDigital_DesafioBackEnd.Application.Lead
@@ -63,8 +64,25 @@ namespace FrameworkDigital_DesafioBackEnd.Application.Lead
         }
 
         public bool UpdateLeadStatus(int leadId, string status)
-        {
-            throw new NotImplementedException();
+        {            
+            if (!Enum.TryParse<LeadStatusEnum>(status, true, out var parsedStatus))
+            {
+                return false; // Status inválido
+            }
+            
+            var lead = _leadRepository.GetById(leadId);
+            if (lead == null)
+            {
+                return false;
+            }
+
+            // Atualizar o status
+            lead.Status = parsedStatus;
+
+            // Salvar as mudanças no banco de dados
+            _leadRepository._context.SaveChanges();
+
+            return true; 
         }
 
         private IQueryable<LeadModel> ApplyGetLeadsFilters(IQueryable<LeadModel> query, GetLeadsFilterDTO filter)

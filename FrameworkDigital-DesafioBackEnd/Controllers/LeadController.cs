@@ -113,6 +113,5 @@ namespace FrameworkDigital_DesafioBackEnd.Controllers
             return BadRequest("Falha ao atualizar o status do Lead");
         }
 
-
     }
 }
