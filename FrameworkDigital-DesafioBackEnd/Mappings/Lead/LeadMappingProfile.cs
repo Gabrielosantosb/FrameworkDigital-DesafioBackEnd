@@ -9,12 +9,18 @@ namespace FrameworkDigital_DesafioBackEnd.Mappings
     {
         public LeadMappingProfile()
         {
+            //AutoMapper para CreateLead
             CreateMap<LeadRequest, LeadModel>()
                 .AfterMap((leadRequest, leadModel) =>
                 {
                     leadModel.Status = ORM.Enum.LeadStatusEnum.Invited;
                     leadModel.DateCreated = DateTime.Now;
                 });
+
+            //AutoMapper para UpdateLead
+            CreateMap<LeadRequest, LeadModel>()
+                .ForMember(dest => dest.Status, opt => opt.Ignore())  // Ignora a atualização do status
+                .ForMember(dest => dest.DateCreated, opt => opt.Ignore());  // Ignora a data de criação
         }
     }
 }

@@ -47,9 +47,11 @@ namespace FrameworkDigital_DesafioBackEnd.Application.Lead
         {
             var existingLead = _leadRepository.GetById(leadId);
             if (existingLead == null) return null;
-
+       
             _mapper.Map(updatedLead, existingLead);
+
             _leadRepository.SaveChanges();
+
             return existingLead;
         }
 
