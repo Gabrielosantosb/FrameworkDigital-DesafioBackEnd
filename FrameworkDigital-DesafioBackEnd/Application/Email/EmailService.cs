@@ -18,9 +18,14 @@ public class EmailService
 
     public void SendEmail(LeadModel lead)
     {
+        var leadPrice = lead.Price;
+        var AppliedDiscount = lead.Price * 0.10m;
+        var leadPriceWithDiscount = leadPrice - AppliedDiscount;
+
+
         if (_emailSettings == null)
         {
-            throw new EmailSendException("Email settings not configured.");
+            throw new EmailSendException("Configurações de email não válidas.");
         }
 
         MailMessage mailMessage = new MailMessage
@@ -31,12 +36,12 @@ public class EmailService
                 <h1>Notificação de Status de Lead</h1>
                 <p><strong>Status da Lead:</strong> {lead.Status}</p>
                 <p><strong>Nome da Lead:</strong> {lead.ContactFirstName}</p>
-                <p><strong>Valor Original:</strong> {lead.Price:C}</p>
-                <p><strong>Desconto Aplicado:</strong> {lead.Price * 0.10m:C}</p>
-                <p><strong>Valor Final Após Desconto:</strong> {lead.Price:C}</p>",
+                <p><strong>Valor Original:</strong> {leadPrice:C}</p>
+                <p><strong>Desconto Aplicado:</strong> {AppliedDiscount:C}</p>
+                <p><strong>Valor Final Após Desconto:</strong> {leadPriceWithDiscount:C}</p>",
             IsBodyHtml = true
         };
-
+        
         mailMessage.To.Add(lead.ContactEmail);
         //mailMessage.To.Add("gabrielosantosb@gmail.com");
 
