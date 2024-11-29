@@ -39,7 +39,7 @@ namespace FrameworkDigital_DesafioBackEnd.Controllers
             }
             else
             {
-                return NotFound("Leads ainda não criadas!");
+                return NoContent();
             }
 
         }
