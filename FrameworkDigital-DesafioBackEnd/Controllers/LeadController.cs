@@ -32,19 +32,23 @@ namespace FrameworkDigital_DesafioBackEnd.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult GetLeads([FromQuery] PaginationDTO pagination, [FromQuery] GetLeadsFilterDTO filters)
         {
-            var (leads, totalCount) = _leadService.GetLeads(pagination, filters);
-
-            if (leads.Any())
+            try
             {
+                var (leads, totalCount) = _leadService.GetLeads(pagination, filters);
+                
                 return Ok(new
                 {
                     totalCount,
                     leads
                 });
             }
-            else
-            {
-                return NoContent();
+            catch (Exception ex)
+            {                
+                return BadRequest(new
+                {
+                    message = "Erro ao processar a requisição.",
+                    error = ex.Message
+                });
             }
         }
 

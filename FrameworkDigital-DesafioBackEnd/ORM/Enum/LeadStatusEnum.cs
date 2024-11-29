@@ -5,13 +5,13 @@ namespace FrameworkDigital_DesafioBackEnd.ORM.Enum
      public enum LeadStatusEnum
     {
         [EnumMember(Value = "Invited")]
-        Invited = 0,
+        Invited = 1,
 
         [EnumMember(Value = "Accepted")]
-        Accepted = 1,
+        Accepted = 2,
 
         [EnumMember(Value = "Declined")]
-        Declined = 2
+        Declined = 3
       
     }
 }
