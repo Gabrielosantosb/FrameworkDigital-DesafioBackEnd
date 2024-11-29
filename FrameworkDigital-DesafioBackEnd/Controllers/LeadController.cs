@@ -141,26 +141,31 @@ namespace FrameworkDigital_DesafioBackEnd.Controllers
         /// <returns>Mensagem de confirmação ou uma mensagem de erro.</returns>
         /// <response code="200">Status da Lead atualizado com sucesso.</response>
         /// <response code="400">Erro ao atualizar o status da Lead.</response>
-        [HttpPatch("update-lead-status/{leadId}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult UpdateLeadStatus([FromBody] UpdateLeadStatusRequest statusRequest, int leadId)
+[HttpPatch("update-lead-status/{leadId}")]
+[ProducesResponseType(StatusCodes.Status200OK)]
+[ProducesResponseType(StatusCodes.Status400BadRequest)]
+[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+public IActionResult UpdateLeadStatus([FromBody] UpdateLeadStatusRequest statusRequest, int leadId)
+{
+    if (statusRequest == null)
+    {
+        return BadRequest(new { Message = "Requisição inválida.", Success = false });
+    }
+
+    try
+    {
+        if (_leadService.UpdateLeadStatus(leadId, statusRequest))
         {
-            if (statusRequest == null)
-            {
-                return BadRequest("Requisição inválida.");
-            }
-
-
-            var updated = _leadService.UpdateLeadStatus(leadId, statusRequest);
-
-            if (updated)
-            {
-                return Ok($"Lead ID {leadId} atualizado para o status '{statusRequest.Status}'");
-            }
-
-            return BadRequest("Falha ao atualizar o status do Lead");
+            return Ok(new { Message = $"Lead ID {leadId} atualizado para o status '{statusRequest.Status}'", Success = true });
         }
+
+        return BadRequest(new { Message = "Falha ao atualizar o status do Lead.", Success = false });
+    }
+    catch (Exception ex)
+    {
+        return StatusCode(500, new { Message = "Erro interno ao atualizar o Lead.", Success = false, Error = ex.Message });
+    }
+}
 
     }
 }
