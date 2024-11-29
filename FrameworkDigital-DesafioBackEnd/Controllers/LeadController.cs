@@ -28,20 +28,24 @@ namespace FrameworkDigital_DesafioBackEnd.Controllers
         /// <returns>Identificador do pedido</returns>I
         [HttpGet("get-leads")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult GetLeads([FromQuery] PaginationDTO pagination, [FromQuery] GetLeadsFilterDTO filters)
-        {            
-            var leads = _leadService.GetLeads(pagination, filters);
-        
+        {
+            var (leads, totalCount) = _leadService.GetLeads(pagination, filters);
+
             if (leads.Any())
             {
-                return Ok(leads);
+                return Ok(new
+                {
+                    totalCount,
+                    leads
+                });
             }
             else
             {
                 return NoContent();
             }
-
         }
 
 

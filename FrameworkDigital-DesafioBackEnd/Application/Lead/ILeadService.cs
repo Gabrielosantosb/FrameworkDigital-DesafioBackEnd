@@ -6,7 +6,8 @@ namespace FrameworkDigital_DesafioBackEnd.Application.Lead
 {
     public interface ILeadService
     {
-        IEnumerable<LeadModel> GetLeads(PaginationDTO pagination, GetLeadsFilterDTO leadsFilter);
+        (IEnumerable<LeadModel> Leads, int TotalCount) GetLeads(PaginationDTO pagination, GetLeadsFilterDTO leadsFilter); 
+
         LeadModel GetLeadById(int leadId);
         LeadModel CreateLead(CreateLeadRequest leadRequest);
         LeadModel UpdateLead(int leadId, UpdateLeadRequest updatedLead);

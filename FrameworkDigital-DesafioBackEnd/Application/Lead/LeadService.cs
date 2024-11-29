@@ -29,14 +29,20 @@ namespace FrameworkDigital_DesafioBackEnd.Application.Lead
 
         }
 
-        public IEnumerable<LeadModel> GetLeads(PaginationDTO pagination, GetLeadsFilterDTO filter)
+        public (IEnumerable<LeadModel> Leads, int TotalCount) GetLeads(PaginationDTO pagination, GetLeadsFilterDTO filter)
         {
-            var query = _leadRepository._context.Lead.AsQueryable();            
-            query = ApplyGetLeadsFilters(query, filter);            
-            query = query.Skip((pagination.Page - 1) * pagination.PageSize)
-                         .Take(pagination.PageSize);
+            var query = _leadRepository._context.Lead.AsQueryable();
 
-            return query.ToList();
+            query = ApplyGetLeadsFilters(query, filter);
+            
+            var totalCount = query.Count();
+
+            var leads = query
+                .Skip((pagination.Page - 1) * pagination.PageSize)
+                .Take(pagination.PageSize)
+                .ToList();
+
+            return (leads, totalCount);
         }
 
 
